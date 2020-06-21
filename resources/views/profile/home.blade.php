@@ -6,18 +6,23 @@
     <div class="row">
         <div class="col-md-4">
             <p class="text-center">
-                <img src="{{ asset(Auth::user()->avatar) }}" height="280" class="rounded-circle" alt="profile picture">
+                <img src="{{ asset($user->avatar) }}" height="280" class="rounded-circle" alt="profile picture">
             </p>
-            <h2 class="text-center">{{ Auth::user()->name }}</h2>
-            <div class="ml-5 pl-3">
-                <p>Email: {{ Auth::user()->email }}</p>
-                <p>Phone: {{ Auth::user()->phone }}</p>
-                <p>Gender: {{ Auth::user()->gender }}</p>
-                <p>Birthday: {{ Auth::user()->dob }}</p>
+            <h2>Name: {{ $user->name }}</h2>
+            <div>
+                <p>Email: {{ $user->email }}</p>
+                <p>Phone: {{ $user->phone }}</p>
+                <p>Gender: {{ $user->gender }}</p>
+                <p>Birthday: {{ $user->dob }}</p>
             </div>
-            <a href="{{ route('edit.profile.info', Auth::user()->id) }}" class="btn btn-primary btn-sm btn-block">Edit Profile Info</a>
-            <a href="{{ route('edit.profile.picture', Auth::user()->id) }}" class="btn btn-secondary btn-sm btn-block">Edit Profile Picture</a>
-            <a href="{{ route('edit.profile.password', Auth::user()->id) }}" class="btn btn-success btn-sm btn-block">Update Password</a>
+            @if (Auth::id()== $user->id)
+            <a href="{{ route('edit.profile.info', Auth::user()->slug) }}" class="btn btn-primary btn-sm btn-block">Edit
+                Profile Info</a>
+            <a href="{{ route('edit.profile.picture', Auth::user()->slug) }}"
+                class="btn btn-secondary btn-sm btn-block">Edit Profile Picture</a>
+            <a href="{{ route('edit.profile.password', Auth::user()->slug) }}"
+                class="btn btn-success btn-sm btn-block">Update Password</a>
+            @endif
         </div>
         <div class="col-md-8">
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam accusamus, exercitationem esse

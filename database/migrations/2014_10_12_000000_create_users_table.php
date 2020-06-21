@@ -21,6 +21,8 @@ class CreateUsersTable extends Migration
             $table->string('phone');
             $table->string('gender');
             $table->string('avatar');
+            $table->boolean('is_admin')->default(false);
+            $table->string('slug');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

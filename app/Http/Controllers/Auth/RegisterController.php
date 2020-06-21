@@ -85,6 +85,7 @@ class RegisterController extends Controller
             'phone' => $data['phone'],
             'gender' => $data['gender'],
             'avatar' => $imageURL,
+            'slug' => Str::slug($data['name'] . time()),
         ]);
     }
 }

@@ -9,42 +9,36 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class ProfileController extends Controller {
-    public function index() {
-        //
+
+    public function index( $id ) {
+
+        $user = User::where( 'slug', $id )->first();
+        return view( 'profile.home', compact( 'user' ) );
     }
 
-    public function create() {
-        //
-    }
+    public function edit_details() {
 
-    public function store( Request $request ) {
-        //
-    }
-
-    public function show( $id ) {
-
-        $user = User::findOrFail( $id );
-        return view( 'profile.editinfo' );
+        return view( 'profile.edit-details' );
     }
 
     public function updateinfo( Request $request ) {
-        
+
         $rules = [
-            'name' => ['required', 'string', 'max:255'],
-            'dob' => ['required', 'string', 'min:6', 'max:25'],
-            'phone' => ['required', 'string', 'min:10', 'max:25'],
+            'name'   => ['required', 'string', 'max:255'],
+            'dob'    => ['required', 'string', 'min:6', 'max:25'],
+            'phone'  => ['required', 'string', 'min:10', 'max:25'],
             'gender' => ['required', 'string', 'max:10'],
         ];
 
         $this->validate( $request, $rules );
 
         $user = Auth::user();
-        $user->name = $request->get( 'name' ) ;
-        $user->dob = $request->get( 'dob' ) ;
-        $user->phone = $request->get( 'phone' ) ;
-        $user->gender = $request->get( 'gender' ) ;
+        $user->name = $request->get( 'name' );
+        $user->dob = $request->get( 'dob' );
+        $user->phone = $request->get( 'phone' );
+        $user->gender = $request->get( 'gender' );
         $user->save();
-        return redirect()->route( 'home' )->with( 'success', 'Profile Updated Successfully.' );
+        return redirect( '/profile' . '/' . Auth::user()->slug )->with( 'success', 'Profile Updated Successfully.' );
     }
 
     public function edit_pro_pic( $id ) {
@@ -54,7 +48,7 @@ class ProfileController extends Controller {
     }
 
     public function update_pro_pic( Request $request ) {
-        
+
         $rules = [
             'avatar' => ['required', 'image', 'max:2000'],
         ];
@@ -63,20 +57,19 @@ class ProfileController extends Controller {
 
         $oldpicture = Auth::user()->avatar;
 
-        $image = $request->file('avatar');
-        $imageName = 'p_picture-' . time() . Str::random(10);
-        $extension = strtolower($image->getClientOriginalExtension());
-        $imageFullName = $imageName. '.' .$extension;
+        $image = $request->file( 'avatar' );
+        $imageName = 'p_picture-' . time() . Str::random( 10 );
+        $extension = strtolower( $image->getClientOriginalExtension() );
+        $imageFullName = $imageName . '.' . $extension;
         $uploadPath = 'img/profile-pic/';
         $imageURL = $uploadPath . $imageFullName;
-        $success = $image->move($uploadPath, $imageFullName);
-
+        $success = $image->move( $uploadPath, $imageFullName );
 
         $user = Auth::user();
         $user->avatar = $imageURL;
         $user->save();
-        unlink($oldpicture);
-        return redirect()->route( 'home' )->with( 'success', 'Profile Picture Updated Successfully.' );
+        unlink( $oldpicture );
+        return redirect( '/profile' . '/' . Auth::user()->slug )->with( 'success', 'Profile Picture Updated Successfully.' );
     }
 
     public function updatepassword( $id ) {
@@ -105,7 +98,7 @@ class ProfileController extends Controller {
         $user = Auth::user();
         $user->password = Hash::make( $request->get( 'password' ) );
         $user->save();
-        return redirect()->route( 'home' )->with( 'success', 'Password Changer Successfully.' );
+        return redirect( '/profile' . '/' . Auth::user()->slug )->with( 'success', 'Password Changer Successfully.' );
     }
 
     public function destroy( $id ) {
