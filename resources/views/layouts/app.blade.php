@@ -17,6 +17,9 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
+    {{-- Font Awesome --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/js/all.min.js"></script>
+
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
@@ -37,7 +40,15 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{{ url('/') }}">Home</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{{ url('/') }}">About</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{{ url('/') }}">Contact</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -87,6 +98,13 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+        <footer class="bg-dark text-white pt-4 pb-1">
+            <div class="container">
+                <h5 class="text-center">Copyright &copy; 2020. Story Share App. All rights reserved</h5>
+                <p class="lead text-center">made with ❤️️ by <a href="https://github.com/meinjam" target="_blank">injam</a></p>
+            </div>
+        </footer>
     </div>
 </body>
 

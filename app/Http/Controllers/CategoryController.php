@@ -2,31 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Tag;
+use App\Category;
 use Illuminate\Http\Request;
 
-class TagController extends Controller {
+class CategoryController extends Controller {
     public function index() {
         //
     }
 
     public function create() {
 
-        $tags = Tag::orderBy( 'id', 'desc' )->paginate(10);
-        return view( 'tags.create', compact( 'tags' ) );
+        $categories = Category::orderBy( 'id', 'desc' )->paginate( 10 );
+        return view( 'category.create', compact( 'categories' ) );
     }
 
     public function store( Request $request ) {
-
+        
         $rules = [
-            'tag' => ['required', 'min:3', 'max:20'],
+            'category' => ['required', 'min:3', 'max:20'],
         ];
         $this->validate( $request, $rules );
 
-        $tags = new Tag();
-        $tags->tag = $request->tag;
-        $tags->save();
-        return redirect()->route( 'create.story' )->with( 'success', 'Tag created successfully.' );
+        $category = new Category();
+        $category->name = $request->category;
+        $category->save();
+        return redirect()->route( 'create.story' )->with( 'success', 'Category created successfully.' );
     }
 
     public function show( $id ) {

@@ -12,8 +12,10 @@ class ProfileController extends Controller {
 
     public function index( $id ) {
 
-        $user = User::where( 'slug', $id )->first();
+        $user = User::where( 'slug', $id )->firstOrFail();
+        // $user = User::with('stories')->where( 'slug', $id )->first();
         return view( 'profile.home', compact( 'user' ) );
+        // return response()->json($user->stories);
     }
 
     public function edit_details() {
@@ -43,8 +45,8 @@ class ProfileController extends Controller {
 
     public function edit_pro_pic( $id ) {
 
-        $user = User::findOrFail( $id );
-        return view( 'profile.editprofilepic' );
+        $user = User::where( 'slug', $id )->first();
+        return view( 'profile.editprofilepic', compact( 'user' ) );
     }
 
     public function update_pro_pic( Request $request ) {
@@ -74,8 +76,8 @@ class ProfileController extends Controller {
 
     public function updatepassword( $id ) {
 
-        $user = User::findOrFail( $id );
-        return view( 'profile.updatepassword' );
+        $user = User::where( 'slug', $id )->first();
+        return view( 'profile.updatepassword', compact( 'user' ) );
     }
 
     public function updatepasswordstore( Request $request ) {

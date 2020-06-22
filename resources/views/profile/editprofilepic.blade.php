@@ -34,7 +34,7 @@
                                 <button type="submit" class="btn btn-success">
                                     Update
                                 </button>
-                                <a href="{{ route('profile', Auth::id()) }}" class="btn btn-primary">Go Back to Profile</a>
+                                <a href="{{ route('profile', Auth::user()->slug) }}" class="btn btn-primary">Go Back to Profile</a>
                             </div>
                         </div>
                     </form>
