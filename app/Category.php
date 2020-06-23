@@ -10,6 +10,6 @@ class Category extends Model {
     ];
 
     public function stories() {
-        return $this->hasMany( 'App\Story' );
+        return $this->hasMany( 'App\Story' )->latest();
     }
 }

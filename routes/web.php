@@ -2,9 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get( '/', function () {
-    return view( 'frontend.home' );
-} );
+// Frontend Routes
+Route::get( '/', 'FrontendController@index' );
+Route::get('/story/create', 'StoryController@create')->name('create.story');
+Route::get( '/story/{slug}', 'FrontendController@single_story' )->name('single.story');
+Route::get('/category/create', 'CategoryController@create')->name('create.category')->middleware('auth');
+Route::get( '/category/{name}', 'CategoryController@show' )->name('show.category');
+Route::get('/tag/create', 'TagController@create')->name('create.tag')->middleware('auth');
+Route::get('/tag/{name}', 'TagController@show')->name('show.tag');
+Route::get( '/contact', 'FrontendController@contact' )->name('contact');
 
 Route::get( '/admin', function () {
     return view( 'admin.home' );
@@ -25,19 +31,19 @@ Route::group(['prefix' => 'profile'], function () {
 
 // Tag Routes
 Route::group(['prefix' => 'tag', 'middleware'=>'auth'], function () {
-    Route::get('/create', 'TagController@create')->name('create.tag');
+    // Route::get('/create', 'TagController@create')->name('create.tag');
     Route::post('/create', 'TagController@store')->name('store.tag');
 });
 
 // Category Routes
 Route::group(['prefix' => 'category', 'middleware'=>'auth'], function () {
-    Route::get('/create', 'CategoryController@create')->name('create.category');
+    // Route::get('/create', 'CategoryController@create')->name('create.category');
     Route::post('/create', 'CategoryController@store')->name('store.category');
 });
 
 // Stories Routes
 Route::group(['prefix' => 'story', 'middleware'=>'auth'], function () {
-    Route::get('/create', 'StoryController@create')->name('create.story');
+    // Route::get('/create', 'StoryController@create')->name('create.story');
     Route::post('/create', 'StoryController@store')->name('store.story');
     Route::get('/{slug}/delete', 'StoryController@destroy')->name('delete.story');
     Route::get('/{slug}/edit', 'StoryController@edit')->name('edit.story');

@@ -45,7 +45,7 @@ class StoryController extends Controller {
         $story->title = $request->title;
         $story->category_id = $request->category_id;
         $story->story = $request->story;
-        $story->slug = Str::slug( $request->title . time() );
+        $story->slug = Str::slug( $request->title . '-' . time() );
         $story->user_id = Auth::user()->id;
 
         $image = $request->file( 'image' );
@@ -91,7 +91,7 @@ class StoryController extends Controller {
         $story->title = $request->title;
         $story->category_id = $request->category_id;
         $story->story = $request->story;
-        $story->slug = Str::slug( $request->title . time() );
+        $story->slug = Str::slug( $request->title . '-' . time() );
         // $story->user_id = Auth::user()->id;
         $image = $request->file( 'image' );
         $old_image = $story->image;

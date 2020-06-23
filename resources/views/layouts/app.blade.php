@@ -47,7 +47,7 @@
                             <a class="nav-link" href="{{ url('/') }}">About</a>
                         </li>
                         <li class="nav-item active">
-                            <a class="nav-link" href="{{ url('/') }}">Contact</a>
+                            <a class="nav-link" href="{{ route('contact') }}">Contact</a>
                         </li>
                     </ul>
 

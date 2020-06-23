@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Tag;
 use Illuminate\Http\Request;
+use App\Category;
+use App\Story;
 
 class TagController extends Controller {
     public function index() {
@@ -29,8 +31,13 @@ class TagController extends Controller {
         return redirect()->route( 'create.story' )->with( 'success', 'Tag created successfully.' );
     }
 
-    public function show( $id ) {
-        //
+    public function show( $name ) {
+        
+        $tag = Tag::where( 'tag', $name )->firstOrFail();
+        $categories = Category::orderBy( 'id', 'desc' )->get();
+        $tagssss = Tag::orderBy( 'id', 'desc' )->get();
+        // return response()->json($tag->stories);
+        return view( 'frontend.tag', compact( 'tag', 'categories', 'tagssss' ) );
     }
 
     public function edit( $id ) {

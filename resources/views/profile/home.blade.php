@@ -59,28 +59,36 @@
             </h3>
             @foreach ($user->stories as $story)
             <div class="card mb-3 shadow">
-                <img class="card-img-top img-fluid" src="{{ asset($story->image) }}" alt="Story Image">
+                <img class="card-img-top img-fluid" src="{{ asset($story->image) }}" alt="{{ $story->title }}">
                 <div class="card-body">
                     <h2 class="card-title">{{ $story->title }}</h2>
-                    <p class="card-text">{{ substr($story->story, 0, 150) . '.........' }}</p>
+                    <p class="card-text text-justify">{{ substr($story->story, 0, 150) . '.........' }}</p>
                     <div class="d-flex justify-content-between">
+                        <p><i class="far fa-bookmark"></i> <a
+                                href="{{ route('show.category', strtolower($story->category->name)) }}">{{ ucfirst($story->category->name) }}</a>
+                        </p>
+
                         <p><i class="far fa-clock"></i> {{ $story->created_at->diffForHumans() }}</p>
-                        <p class="strong"><i class="far fa-bookmark"></i> {{ $story->category->name }}</p>
                     </div>
                     <div class="d-flex justify-content-between">
                         <p><i class="fas fa-tags"></i>
                             @foreach ($story->tags as $tag)
-                            {{ $tag->tag }},
+                            <a href="{{ route('show.tag', strtolower($tag->tag)) }}">{{ ucfirst($tag->tag) }},</a>
                             @endforeach
                         </p>
-                        <div>
+                        <p><i class="far fa-comment-dots"></i> Comments: 0</p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div class="mt-2">
                             @if (Auth::id() == $user->id)
                             <a href="{{ route('edit.story', $story->slug) }}"><i
-                                    class="far fa-edit text-success mr-2"></i></a>
+                                    class="far fa-edit text-success fa-2x mr-2"></i></a>
                             <a href="{{ route('delete.story', $story->slug) }}"><i
-                                    class="fas fa-trash-alt text-danger"></i></a>
+                                    class="fas fa-trash-alt text-danger fa-2x"></i></a>
                             @endif
                         </div>
+                        <a href="{{ route('single.story', $story->slug) }}" class="btn btn-primary float-right">Read
+                            More >>></a>
                     </div>
                 </div>
             </div>
