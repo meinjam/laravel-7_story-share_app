@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="container">
+    @include('layouts.message')
     <h1>Latest Stories Shared by Users</h1>
     <hr>
     <div class="row">

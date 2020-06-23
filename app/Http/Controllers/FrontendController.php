@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Story;
-use Illuminate\Http\Request;
 use App\Category;
+use App\Story;
 use App\Tag;
+use Illuminate\Http\Request;
 
 class FrontendController extends Controller {
 
@@ -17,17 +17,51 @@ class FrontendController extends Controller {
         return view( 'frontend.home', compact( 'stories', 'categories', 'tagssss' ) );
     }
 
-    public function single_story($slug) {
-        
+    public function single_story( $slug ) {
+
         $story = Story::where( 'slug', $slug )->firstOrFail();
         $tags = Tag::orderBy( 'id', 'desc' )->get();
         $categories = Category::orderBy( 'id', 'desc' )->get();
         return view( 'frontend.single_story', compact( 'story', 'tags', 'categories' ) );
     }
 
+    public function search( Request $request ) {
+
+        $search = $request->get( 'search' );
+
+        if ( $search == '' ) {
+            return redirect()->route( 'homepage' )->with( 'error', 'Please type something and search.' );
+        } else {
+            $result = Story::where( 'title', 'like', '%' . $search . '%' )->orderBy( 'id', 'desc' )->paginate( 5 );
+            $categories = Category::orderBy( 'id', 'desc' )->get();
+            $tagssss = Tag::orderBy( 'id', 'desc' )->get();
+
+            return view( 'frontend.search', compact( 'result', 'categories', 'tagssss' ) );
+        }
+        // $result = DB::table( 'stories' )
+        //     ->join( 'categories', 'categories.id', '=', 'stories.category_id' )
+        //     ->join( 'users', 'user.id', '=', 'stories.user_id' )
+        //     ->select( 'stories.*', 'categories.name' )
+        //     ->where( 'stories.title', 'like', '%' . $search . '%' )
+        //     ->orWhere( 'stories.story', 'like', '%' . $search . '%' )
+        //     ->orWhere( 'categories.name', 'like', '%' . $search . '%' )
+        //     ->orderBy( 'id', 'desc' )
+        //     // ->paginate( 10 );
+        //     ->get();
+
+        // $result = Story::with( 'category', 'tags' )
+        //     ->where( 'title', 'like', '%' . $search . '%' )
+        //     ->orWhere( 'story', 'like', '%' . $search . '%' )
+        //     ->whereHas( 'category', function ( $query ) use ( $request ) {
+        //         $query->where( 'name', 'like', '%' . $request . '%' );
+        //     } )->get();
+
+        // return response()->json( $result );
+    }
+
     public function contact() {
-        
-        return view('frontend.contact');
+
+        return view( 'frontend.contact' );
     }
 
     public function store( Request $request ) {

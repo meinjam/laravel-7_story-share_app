@@ -3,8 +3,9 @@
 use Illuminate\Support\Facades\Route;
 
 // Frontend Routes
-Route::get( '/', 'FrontendController@index' );
+Route::get( '/', 'FrontendController@index' )->name('homepage');
 Route::get('/story/create', 'StoryController@create')->name('create.story');
+Route::get('/search', 'FrontendController@search')->name('search.all');
 Route::get( '/story/{slug}', 'FrontendController@single_story' )->name('single.story');
 Route::get('/category/create', 'CategoryController@create')->name('create.category')->middleware('auth');
 Route::get( '/category/{name}', 'CategoryController@show' )->name('show.category');

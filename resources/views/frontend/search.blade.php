@@ -2,14 +2,15 @@
 
 @section('content')
 <div class="container">
+    <h1>Search Results</h1>
+    <hr>
     <div class="row">
         <div class="col-md-8">
-            <h1>Recent Stories of {{ ucfirst($category->name) }} Category</h1>
-            <hr>
-            @if (count($category->stories) == 0)
-            <h1>Opps, No Story Found!!!</h1>
+
+            @if (count($result) == 0)
+            <h1>Opps, No Match Found!!!</h1>
             @else
-            @foreach ($category->stories as $story)
+            @foreach ($result as $story)
             <div class="card mb-3 shadow">
                 <img class="card-img-top" src="{{ asset($story->image) }}" alt="{{ $story->title }}">
                 <div class="card-body">
@@ -32,7 +33,7 @@
                     </div>
                     <div class="d-flex justify-content-between">
                         <div class="mt-2">
-                            @if (Auth::id() == $story->user->id)
+                            @if (Auth::id() == $story->user_id)
                             <a href="{{ route('edit.story', $story->slug) }}"><i
                                     class="far fa-edit text-success fa-2x mr-2"></i></a>
                             <a href="{{ route('delete.story', $story->slug) }}"><i
@@ -45,8 +46,9 @@
                 </div>
             </div>
             @endforeach
-            {{-- {{ $category->stories->links() }} --}}
+            {{ $result->links() }}
             @endif
+
         </div>
         <div class="col-md-4">
             <div class="card mb-3 shadow">
@@ -66,7 +68,6 @@
                     <h2>Categories</h2>
                 </div>
                 <div class="card-body">
-                    <h5>Latest Categories:</h5>
                     @foreach ($categories as $category)
                     <p><i class="fas fa-circle"></i> <a
                             href="{{ route('show.category', strtolower($category->name)) }}">{{ ucfirst($category->name) }}</a>

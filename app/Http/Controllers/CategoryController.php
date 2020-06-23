@@ -34,8 +34,8 @@ class CategoryController extends Controller {
     public function show( $name ) {
         
         $category = Category::where( 'name', $name )->firstOrFail();
-        $categories = Category::orderBy( 'id', 'desc' )->get();
-        $tagssss = Tag::orderBy( 'id', 'desc' )->get();
+        $categories = Category::orderBy( 'id', 'desc' )->take('5')->get();
+        $tagssss = Tag::orderBy( 'id', 'desc' )->take('5')->get();
         // return response()->json($category->stories);
         return view( 'frontend.category', compact( 'category', 'categories', 'tagssss' ) );
     }
