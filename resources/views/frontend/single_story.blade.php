@@ -2,9 +2,11 @@
 
 @section('content')
 <div class="container">
+    @include('layouts.message')
     <div class="row">
         <div class="col-md-8">
-            <div class="card mb-3 shadow">
+
+            <div class="card mb-4 shadow">
                 <img class="card-img-top" src="{{ asset($story->image) }}" alt="{{ $story->title }}">
                 <div class="card-body">
                     <h2 class="card-title text-justify">{{ $story->title }}</h2>
@@ -31,10 +33,64 @@
                             @endforeach
                         </p>
                     </div>
-                    <p class="text-justify">{{ $story->story }}</p>
-                    <p><i class="far fa-comment-dots"></i> Comments: 0</p>
+                    <p class="text-justify">{!! nl2br(e($story->story))!!}</p>
+                    <strong><i class="far fa-comment-dots"></i> Comments: {{ $story->comments->count() }}</strong>
                 </div>
             </div>
+
+            @guest
+                <h2 class="text-danger">Please <a href="{{ URL('/login') }}">Sign in</a> for seeing and posting comments.</h2>
+            @else
+            <h2>Leave a Reply?</h2>
+            <form action="{{ route('store.comment', $story->id) }}" method="post">
+                @csrf
+                <div class="form-group">
+                    <label for="comment">Enter Comment:</label>
+                    <div>
+                        <textarea name="comment" class="form-control @error('comment') is-invalid @enderror" id="comment"
+                            rows="5" value="{{ old('comment') }}" autocomplete="comment" autofocus></textarea>
+                        @error('comment')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">Post Comment</button>
+                </div>
+            </form>
+
+            <h2 class="mt-4">All Comments ({{ $story->comments->count() }})</h2>
+            @foreach ($story->comments as $comment)
+            <div class="card p-3 shadow mb-2">
+                <div class="row">
+                    <div class="col-2">
+                        <img src="{{ asset($comment->user->avatar) }}" class="img-fluid rounded-circle" alt="">
+                    </div>
+                    <div class="col-10">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h3 class="d-inline mr-2 my-2"><a href="{{route('profile', $comment->user->slug) }}">{{ $comment->user->name }}</a></h3>
+                                @if ($comment->user->is_admin)
+                                <p class="d-inline badge badge-pill badge-success">Admin</p>
+                                @else
+                                <p class="d-inline badge badge-pill badge-secondary">User</p>
+                                @endif
+                            </div>
+                            @if (Auth::id() == $comment->user->id)
+                            <a href="{{ route('delete.comment', $comment->id) }}" class="d-inline text-danger"><i class="fas fa-trash-alt text-danger"></i></a>
+                            @endif
+                        </div>
+                        <p class="text-justify">{{ $comment->comment }}</p>
+                        <p class="text-muted">{{ $comment->created_at->format('M d, Y h:i a') }}</p>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+            @endauth
+
         </div>
         <div class="col-md-4">
             <div class="card mb-3 shadow">
@@ -51,24 +107,24 @@
             </div>
             <div class="card mb-3 shadow">
                 <div class="card-header">
-                    <h2>Categories</h2>
+                    <h2>Top 5 Categories</h2>
                 </div>
                 <div class="card-body">
                     @foreach ($categories as $category)
                     <p><i class="fas fa-circle"></i> <a
-                            href="{{ route('show.category', strtolower($category->name)) }}">{{ ucwords($category->name) }}</a>
+                            href="{{ route('show.category', strtolower($category->name)) }}">{{ ucwords($category->name) }}</a> ({{ $category->stories->count() }} stories)
                     </p>
                     @endforeach
                 </div>
             </div>
             <div class="card mb-3 shadow">
                 <div class="card-header">
-                    <h2>Tags</h2>
+                    <h2>Top 5 Tags</h2>
                 </div>
                 <div class="card-body">
                     @foreach ($tags as $tag)
                     <p><i class="fas fa-tags"></i> <a
-                            href="{{ route('show.tag', strtolower($tag->tag)) }}">{{ ucwords($tag->tag) }}</a></p>
+                            href="{{ route('show.tag', strtolower($tag->tag)) }}">{{ ucwords($tag->tag) }}</a> ({{ $tag->stories->count() }} stories)</p>
                     @endforeach
                 </div>
             </div>

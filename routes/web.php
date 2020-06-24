@@ -11,6 +11,8 @@ Route::get('/category/create', 'CategoryController@create')->name('create.catego
 Route::get( '/category/{name}', 'CategoryController@show' )->name('show.category');
 Route::get('/tag/create', 'TagController@create')->name('create.tag')->middleware('auth');
 Route::get('/tag/{name}', 'TagController@show')->name('show.tag');
+Route::post('/comment/{post_id}', 'CommentController@store')->name('store.comment');
+Route::get('/comment/{id}/delete', 'CommentController@destroy')->name('delete.comment');
 Route::get( '/contact', 'FrontendController@contact' )->name('contact');
 
 Route::get( '/admin', function () {

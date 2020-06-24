@@ -57,7 +57,10 @@
                 {{ $user->name }}'s Latest Stories
                 @endif
             </h3>
-            @foreach ($user->stories as $story)
+            @if ($stories->count() == 0)
+                <h1 class="mt-3">Opps, No Story Found!!!</h1>
+            @else
+            @foreach ($stories as $story)
             <div class="card mb-3 shadow">
                 <img class="card-img-top img-fluid" src="{{ asset($story->image) }}" alt="{{ $story->title }}">
                 <div class="card-body">
@@ -76,7 +79,7 @@
                             <a href="{{ route('show.tag', strtolower($tag->tag)) }}">{{ ucfirst($tag->tag) }},</a>
                             @endforeach
                         </p>
-                        <p><i class="far fa-comment-dots"></i> Comments: 0</p>
+                        <p><i class="far fa-comment-dots"></i> Comments: {{ $story->comments->count() }}</p>
                     </div>
                     <div class="d-flex justify-content-between">
                         <div class="mt-2">
@@ -87,12 +90,18 @@
                                     class="fas fa-trash-alt text-danger fa-2x"></i></a>
                             @endif
                         </div>
+                        @if ($story->is_published == 0)
+                        <p class="btn-danger mt-2 p-3 rounded text-center">This story is blocked by the Admin.</p>
+                        @else
                         <a href="{{ route('single.story', $story->slug) }}" class="btn btn-primary float-right">Read
                             More >>></a>
+                        @endif
                     </div>
                 </div>
             </div>
             @endforeach
+            {{ $stories->links() }}
+            @endif
         </div>
     </div>
 </div>

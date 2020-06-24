@@ -13,8 +13,9 @@ class ProfileController extends Controller {
     public function index( $id ) {
 
         $user = User::where( 'slug', $id )->firstOrFail();
+        $stories = $user->stories()->paginate(5);
         // $user = User::with('stories')->where( 'slug', $id )->first();
-        return view( 'profile.home', compact( 'user' ) );
+        return view( 'profile.home', compact( 'user', 'stories' ) );
         // return response()->json($user->stories);
     }
 

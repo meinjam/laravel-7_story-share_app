@@ -34,12 +34,16 @@ class StoryController extends Controller {
         $rules = [
             'title'       => 'required|min:8|max:255',
             'category_id' => 'required',
-            'tags'        => 'required',
+            // 'tags'        => 'required',
             'image'       => 'required|image|max:5000',
             'story'       => 'required|min:20|max:5000',
         ];
 
         $this->validate( $request, $rules );
+
+        if ($request->tags == '') {
+            return redirect()->back()->with( 'error', 'Please Select A Tag.' );
+        }
 
         $story = new Story();
         $story->title = $request->title;
@@ -80,12 +84,16 @@ class StoryController extends Controller {
         $rules = [
             'title'       => 'required|min:8|max:255',
             'category_id' => 'required',
-            'tags'        => 'required',
+            // 'tags'        => 'required',
             'image'       => 'image|max:5000',
             'story'       => 'required|min:20|max:5000',
         ];
 
         $this->validate( $request, $rules );
+
+        if ($request->tags == '') {
+            return redirect()->back()->with( 'error', 'Please Select A Tag.' );
+        }
         // dd($request->all());
         $story = Story::where( 'slug', $id )->first();
         $story->title = $request->title;

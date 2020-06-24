@@ -11,17 +11,21 @@ class FrontendController extends Controller {
 
     public function index() {
 
-        $stories = Story::orderBy( 'id', 'desc' )->where( 'is_published', '1' )->paginate( 10 );
-        $categories = Category::orderBy( 'id', 'desc' )->get();
-        $tagssss = Tag::orderBy( 'id', 'desc' )->get();
+        $stories = Story::orderBy( 'id', 'desc' )->where( 'is_published', '1' )->paginate( 5 );
+        // $categories = Category::orderBy( 'id', 'desc' )->get();
+        $categories = Category::withCount( 'stories' )->orderBy('stories_count', 'desc')->take(5)->get();
+        $tagssss = Tag::withCount( 'stories' )->orderBy('stories_count', 'desc')->take(5)->get();
+        // $tagssss = Tag::orderBy( 'id', 'desc' )->get();
         return view( 'frontend.home', compact( 'stories', 'categories', 'tagssss' ) );
     }
 
     public function single_story( $slug ) {
 
         $story = Story::where( 'slug', $slug )->firstOrFail();
-        $tags = Tag::orderBy( 'id', 'desc' )->get();
-        $categories = Category::orderBy( 'id', 'desc' )->get();
+        // $tags = Tag::orderBy( 'id', 'desc' )->get();
+        // $categories = Category::orderBy( 'id', 'desc' )->get();
+        $categories = Category::withCount( 'stories' )->orderBy('stories_count', 'desc')->take(5)->get();
+        $tags = Tag::withCount( 'stories' )->orderBy('stories_count', 'desc')->take(5)->get();
         return view( 'frontend.single_story', compact( 'story', 'tags', 'categories' ) );
     }
 
@@ -32,9 +36,14 @@ class FrontendController extends Controller {
         if ( $search == '' ) {
             return redirect()->route( 'homepage' )->with( 'error', 'Please type something and search.' );
         } else {
-            $result = Story::where( 'title', 'like', '%' . $search . '%' )->orderBy( 'id', 'desc' )->paginate( 5 );
-            $categories = Category::orderBy( 'id', 'desc' )->get();
-            $tagssss = Tag::orderBy( 'id', 'desc' )->get();
+            $result = Story::where( 'title', 'like', '%' . $search . '%' )
+            ->orWhere( 'story', 'like', '%' . $search . '%' )
+            ->orderBy( 'id', 'desc' )
+            ->paginate( 5 );
+            // $categories = Category::orderBy( 'id', 'desc' )->get();
+            // $tagssss = Tag::orderBy( 'id', 'desc' )->get();
+            $categories = Category::withCount( 'stories' )->orderBy('stories_count', 'desc')->take(5)->get();
+            $tagssss = Tag::withCount( 'stories' )->orderBy('stories_count', 'desc')->take(5)->get();
 
             return view( 'frontend.search', compact( 'result', 'categories', 'tagssss' ) );
         }

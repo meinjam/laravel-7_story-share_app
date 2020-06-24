@@ -1,11 +1,17 @@
+@if (count($stories) == 0)
+<h1>Opps, No Story Found!!!</h1>
+@else
 @foreach ($stories as $story)
 <div class="card mb-3 shadow">
     <img class="card-img-top" src="{{ asset($story->image) }}" alt="{{ $story->title }}">
     <div class="card-body">
         <h2 class="card-title text-justify">{{ $story->title }}</h2>
         <div class="d-flex justify-content-between">
-            <p><i class="far fa-user"></i> <a href="{{ route('profile', $story->user->slug) }}">{{ ucwords($story->user->name) }}</a></p>
-            <p><i class="far fa-bookmark"></i> <a href="{{ route('show.category', strtolower($story->category->name)) }}">{{ ucfirst($story->category->name) }}</a></p>
+            <p><i class="far fa-user"></i> <a
+                    href="{{ route('profile', $story->user->slug) }}">{{ ucwords($story->user->name) }}</a></p>
+            <p><i class="far fa-bookmark"></i> <a
+                    href="{{ route('show.category', strtolower($story->category->name)) }}">{{ ucfirst($story->category->name) }}</a>
+            </p>
             <p><i class="far fa-clock"></i> {{ $story->created_at->diffForHumans() }}</p>
         </div>
         <div class="d-flex justify-content-between">
@@ -14,7 +20,7 @@
                 <a href="{{ route('show.tag', strtolower($tag->tag)) }}">{{ ucfirst($tag->tag) }},</a>
                 @endforeach
             </p>
-            <p><i class="far fa-comment-dots"></i> Comments: 0</p>
+            <p><i class="far fa-comment-dots"></i> Comments: {{ $story->comments->count() }}</p>
         </div>
         <div class="d-flex justify-content-between">
             <div class="mt-2">
@@ -31,3 +37,4 @@
 </div>
 @endforeach
 {{ $stories->links() }}
+@endif

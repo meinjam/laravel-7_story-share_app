@@ -6,7 +6,10 @@
     <hr>
     <div class="row">
         <div class="col-md-8">
-            @foreach ($tag->stories as $story)
+            @if (count($stories) == 0)
+            <h1>Opps, No Story Found!!!</h1>
+            @else
+            @foreach ($stories as $story)
             <div class="card mb-3 shadow">
                 <img class="card-img-top" src="{{ asset($story->image) }}" alt="{{ $story->title }}">
                 <div class="card-body">
@@ -26,7 +29,7 @@
                             <a href="{{ route('show.tag', strtolower($tag->tag)) }}">{{ ucfirst($tag->tag) }},</a>
                             @endforeach
                         </p>
-                        <p><i class="far fa-comment-dots"></i> Comments: 0</p>
+                        <p><i class="far fa-comment-dots"></i> Comments: {{ $story->comments->count() }}</p>
                     </div>
                     <div class="d-flex justify-content-between">
                         <div class="mt-2">
@@ -37,12 +40,18 @@
                                     class="fas fa-trash-alt text-danger fa-2x"></i></a>
                             @endif
                         </div>
-                        <a href="{{ route('single.story', $story->slug) }}" class="btn btn-primary float-right">Read More >>></a>
+                        @if ($story->is_published == 0)
+                        <p class="btn-danger mt-2 p-3 rounded">This story is blocked by the Admin.</p>
+                        @else
+                        <a href="{{ route('single.story', $story->slug) }}" class="btn btn-primary float-right">Read
+                            More >>></a>
+                        @endif
                     </div>
                 </div>
             </div>
             @endforeach
-            {{-- {{ $stories->links() }} --}}
+            {{ $stories->links() }}
+            @endif
         </div>
         <div class="col-md-4">
             <div class="card mb-3 shadow">
@@ -59,24 +68,24 @@
             </div>
             <div class="card mb-3 shadow">
                 <div class="card-header">
-                    <h2>Categories</h2>
+                    <h2>Top Categories</h2>
                 </div>
                 <div class="card-body">
                     @foreach ($categories as $category)
                     <p><i class="fas fa-circle"></i> <a
-                            href="{{ route('show.category', strtolower($category->name)) }}">{{ ucfirst($category->name) }}</a>
+                            href="{{ route('show.category', strtolower($category->name)) }}">{{ ucfirst($category->name) }}</a> ({{ $category->stories->count() }} stories)
                     </p>
                     @endforeach
                 </div>
             </div>
             <div class="card mb-3 shadow">
                 <div class="card-header">
-                    <h2>Tags</h2>
+                    <h2>Top Tags</h2>
                 </div>
                 <div class="card-body">
                     @foreach ($tagssss as $tag)
                     <p><i class="fas fa-tags"></i> <a
-                            href="{{ route('show.tag', strtolower($tag->tag)) }}">{{ ucfirst($tag->tag) }}</a></p>
+                            href="{{ route('show.tag', strtolower($tag->tag)) }}">{{ ucfirst($tag->tag) }}</a> ({{ $tag->stories->count() }} stories)</p>
                     @endforeach
                 </div>
             </div>

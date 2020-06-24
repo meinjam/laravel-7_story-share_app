@@ -17,7 +17,7 @@
 
                             <div class="col-md-6">
                                 <div class="custom-file">
-                                    <input type="file" name="avatar" class="custom-file-input @error('gender') is-invalid @enderror" id="avatar">
+                                    <input type="file" name="avatar" class="custom-file-input @error('avatar') is-invalid @enderror" id="avatar">
                                     <label class="custom-file-label" for="avatar">Choose file...</label>
                                 </div>
 

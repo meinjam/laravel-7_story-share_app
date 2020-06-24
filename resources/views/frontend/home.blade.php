@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     @include('layouts.message')
-    <h1>Latest Stories Shared by Users</h1>
+    <h1>Recent Stories Shared by Users</h1>
     <hr>
     <div class="row">
         <div class="col-md-8">
@@ -24,21 +24,21 @@
             </div>
             <div class="card mb-3 shadow">
                 <div class="card-header">
-                    <h2>Categories</h2>
+                    <h2>Top 5 Categories</h2>
                 </div>
                 <div class="card-body">
                     @foreach ($categories as $category)
-                    <p><i class="fas fa-circle"></i> <a href="{{ route('show.category', strtolower($category->name)) }}">{{ ucfirst($category->name) }}</a></p>
+                    <p><i class="fas fa-circle"></i> <a href="{{ route('show.category', strtolower($category->name)) }}">{{ ucfirst($category->name) }}</a> ({{ $category->stories->count() }} stories)</p>
                     @endforeach
                 </div>
             </div>
             <div class="card mb-3 shadow">
                 <div class="card-header">
-                    <h2>Tags</h2>
+                    <h2>Top 5 Tags</h2>
                 </div>
                 <div class="card-body">
                     @foreach ($tagssss as $tag)
-                    <p><i class="fas fa-tags"></i> <a href="{{ route('show.tag', strtolower($tag->tag)) }}">{{ ucfirst($tag->tag) }}</a></p>
+                    <p><i class="fas fa-tags"></i> <a href="{{ route('show.tag', strtolower($tag->tag)) }}">{{ ucfirst($tag->tag) }}</a> ({{ $tag->stories->count() }} stories)</p>
                     @endforeach
                 </div>
             </div>

@@ -43,6 +43,16 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="{{ url('/') }}">Home</a>
                         </li>
+                        @auth
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{{ route('profile', Auth::user()->slug) }}">Profile</a>
+                        </li>
+                        @if (Auth::user()->is_admin)
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{{ url('/admin') }}">Admin Panel</a>
+                        </li>
+                        @endif
+                        @endauth
                         <li class="nav-item active">
                             <a class="nav-link" href="{{ url('/') }}">About</a>
                         </li>
@@ -54,7 +64,8 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <form action="{{ route('search.all') }}" method="get" class="form-inline my-2 my-lg-0">
-                            <input class="form-control" type="search" name="search" placeholder="Search Content" aria-label="Search">
+                            <input class="form-control" type="search" name="search" placeholder="Search Content"
+                                aria-label="Search">
                             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                         </form>
                         <!-- Authentication Links -->
@@ -75,9 +86,9 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('profile', Auth::user()->slug) }}">
+                                {{-- <a class="dropdown-item" href="{{ route('profile', Auth::user()->slug) }}">
                                     My Profile
-                                </a>
+                                </a> --}}
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
@@ -102,7 +113,8 @@
         <footer class="bg-dark text-white pt-4 pb-1">
             <div class="container">
                 <h5 class="text-center">Copyright &copy; 2020. Story Share App. All rights reserved</h5>
-                <p class="lead text-center">made with ❤️️ by <a href="https://github.com/meinjam" target="_blank">injam</a></p>
+                <p class="lead text-center">made with ❤️️ by <a href="https://github.com/meinjam"
+                        target="_blank">injam</a></p>
             </div>
         </footer>
     </div>
