@@ -70,52 +70,58 @@
         <div class="col-md-10">
             @include('layouts.message')
 
-            <h2>Latest Stories</h2>
+            <h2>All Search Results</h2>
             <hr>
-            <form action="{{ route('search.stories') }}" method="get">
+            <form action="{{ route('search.users') }}" method="get">
                 <div class="input-group mb-3 input-group-lg">
-                    <input type="text" class="form-control" name="search" placeholder="Search stories by title & body text">
+                    <input type="text" class="form-control" name="search"
+                        placeholder="Search user by their name">
                     <div class="input-group-append">
-                      <button class="btn btn-success btn-lg" type="submit">Search</button>
+                        <button class="btn btn-success btn-lg" type="submit">Search</button>
                     </div>
                 </div>
             </form>
 
+            @if (!$result->count())
+                <h2>Sorry, no results found.</h2>
+            @else
+                
             <table class="table table-bordered table-hover">
                 <thead class="thead-dark">
                     <tr>
                         <th>ID</th>
                         <th>Image</th>
-                        <th>Title</th>
-                        <th>Date & Time</th>
-                        <th>Author</th>
+                        <th>Name</th>
+                        <th>Joining Date</th>
+                        <th>Stories</th>
                         <th>Comments</th>
-                        <th>Details</th>
+                        <th>Profile</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($stories as $story)
+                    @foreach ($result as $user)
                     <tr>
-                        <td>{{ $story->id }}</td>
-                        <td><img src="{{ asset($story->image) }}" height="70" alt="{{ $story->title }}"></td>
-                        <td>{{ $story->title }}</td>
-                        <td>{{ $story->created_at->format('h:i a, d M Y') }}</td>
-                        <td><a href="{{ route('profile', $story->user->slug) }}" target="_blank">{{ $story->user->name }}</a></td>
-                        <td>{{ $story->comments->count() }}</td>
-                        <td><a href="{{ route('single.story', $story->slug) }}" class="btn btn-info" target="_blank">Preview</a></td>
+                        <td>{{ $user->id }}</td>
+                        <td><img src="{{ asset($user->avatar) }}" height="70" alt="{{ $user->name }}"></td>
+                        <td>{{ $user->name }}</td>
+                        <td>{{ $user->created_at->format('h:i a, d M Y') }}</td>
+                        <td>{{ $user->stories->count() }}</td>
+                        <td>{{ $user->comments->count() }}</td>
                         <td>
-                            @if (!$story->is_published)
-                            <a href="{{ route('unblock.story', $story->slug) }}" class="btn btn-success">Unblock</a>
-                            @else
-                            <a href="{{ route('block.story', $story->slug) }}" class="btn btn-danger">Block</a>
-                            @endif
+                            <a href="{{ route('profile', $user->slug) }}" class="btn btn-secondary btn-sm"
+                                target="_blank">Profile</a>
+                        </td>
+                        <td>
+                            <a href="{{ route('make.admin', $user->slug) }}" class="btn btn-success btn-sm">Make Admin</a>
+                            <a href="{{ route('delete.user', $user->slug) }}" class="btn btn-danger btn-sm">Block</a>
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
-            {{ $stories->links() }}
+            {{-- {{ $result->links() }} --}}
+            @endif
         </div>
     </div>
 </div>

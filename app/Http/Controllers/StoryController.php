@@ -132,6 +132,22 @@ class StoryController extends Controller {
 
     }
 
+    public function block( Request $request, $id ) {
+        
+        $story = Story::where( 'slug', $id )->first();
+        $story->is_published = '0';
+        $story->save();
+        return redirect()->back()->with( 'success', 'Story Blocked Successfully.' );
+    }
+
+    public function unblock( Request $request, $id ) {
+        
+        $story = Story::where( 'slug', $id )->first();
+        $story->is_published = '1';
+        $story->save();
+        return redirect()->back()->with( 'success', 'Story Un-Blocked Successfully.' );
+    }
+
     public function destroy( $id ) {
 
         $story = Story::where( 'slug', $id )->firstOrFail();

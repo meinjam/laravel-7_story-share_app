@@ -70,7 +70,7 @@
         <div class="col-md-10">
             @include('layouts.message')
 
-            <h2>Latest Stories</h2>
+            <h2>Search Result</h2>
             <hr>
             <form action="{{ route('search.stories') }}" method="get">
                 <div class="input-group mb-3 input-group-lg">
@@ -81,6 +81,9 @@
                 </div>
             </form>
 
+            @if (!$result->count())
+                <h2>Sorry, No story found.</h2>
+            @else
             <table class="table table-bordered table-hover">
                 <thead class="thead-dark">
                     <tr>
@@ -95,7 +98,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($stories as $story)
+                    @foreach ($result as $story)
                     <tr>
                         <td>{{ $story->id }}</td>
                         <td><img src="{{ asset($story->image) }}" height="70" alt="{{ $story->title }}"></td>
@@ -115,7 +118,9 @@
                     @endforeach
                 </tbody>
             </table>
-            {{ $stories->links() }}
+            {{ $result->links() }}
+            @endif
+
         </div>
     </div>
 </div>

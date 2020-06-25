@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Category;
+use App\Comment;
+use App\Story;
+use App\Tag;
 
 class ProfileController extends Controller {
 
@@ -104,7 +108,85 @@ class ProfileController extends Controller {
         return redirect( '/profile' . '/' . Auth::user()->slug )->with( 'success', 'Password Changer Successfully.' );
     }
 
+    public function admin( Request $request, $slug ) {
+        
+        $user = User::where( 'slug', $slug )->first();
+        $user->is_admin = '1';
+        $user->save();
+        return redirect()->route('admin.all-admins')->with( 'success', 'You make ' . $user->name . ' as a Administrator of this website.' );
+    }
+
+    public function remove_admin( Request $request, $slug ) {
+        
+        $user = User::where( 'slug', $slug )->first();
+        $user->is_admin = '0';
+        $user->save();
+        return redirect()->route('admin.all-admins')->with( 'success', 'You remove ' . $user->name . ' from admin panel.' );
+    }
+
     public function destroy( $id ) {
-        //
+        
+        $profile = User::where( 'slug', $id )->firstOrFail();
+        $image = $profile->avatar;
+        $delete = $profile->delete();
+        if ($delete) {
+            unlink( $image );
+            return redirect()->back()->with( 'success', 'User blocked Successfully.' );
+        }
+    }
+
+    public function search(Request $request) {
+
+        $search = $request->get( 'search' );
+
+        if ( $search == '' ) {
+            return redirect()->back()->with( 'error', 'Please type something and then search.' );
+        } else {
+            $result = User::where( 'name', 'like', '%' . $search . '%' )
+            ->where( 'is_admin', '0' )
+            ->orderBy( 'id', 'desc' )
+            ->get();
+        }
+        $user = User::where( 'is_admin', '0' )->get();
+        $admin = User::where( 'is_admin', '1' )->get();
+        $story = Story::all();
+        $category = Category::all();
+        $tag = Tag::all();
+        $comment = Comment::all();
+        return view( 'admin.search-user', compact( 'user', 'admin', 'result', 'category', 'tag', 'comment', 'story' ) );
+    }
+
+    public function create() {
+        
+        $user = User::where( 'is_admin', '0' )->get();
+        $admin = User::where( 'is_admin', '1' )->get();
+        $story = Story::all();
+        $category = Category::all();
+        $tag = Tag::all();
+        $comment = Comment::all();
+        return view( 'admin.create-admin', compact( 'user', 'admin', 'category', 'tag', 'comment', 'story' ) );
+    }
+
+    public function store(Request $request) {
+        
+        $rules = [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ];
+        $this->validate( $request, $rules );
+
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->dob = 'null';
+        $user->phone = 'null';
+        $user->gender = 'null';
+        $user->avatar = 'img/profile-pic/p_picture-1592997626MnMcE0jiqT.jpg';
+        $user->is_admin = true;
+        $user->slug = Str::slug( $request->name . '-' . time() );
+        $user->save();
+        return redirect()->route( 'admin.all-admins' )->with( 'success', 'Admin Added successfully.' );
     }
 }

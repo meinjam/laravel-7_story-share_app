@@ -12,12 +12,21 @@ Route::get( '/category/{name}', 'CategoryController@show' )->name('show.category
 Route::get('/tag/create', 'TagController@create')->name('create.tag')->middleware('auth');
 Route::get('/tag/{name}', 'TagController@show')->name('show.tag');
 Route::post('/comment/{post_id}', 'CommentController@store')->name('store.comment');
-Route::get('/comment/{id}/delete', 'CommentController@destroy')->name('delete.comment');
+Route::get('/comment/{id}/delete', 'CommentController@destroy')->name('delete.comment')->middleware('auth');
 Route::get( '/contact', 'FrontendController@contact' )->name('contact');
 
-Route::get( '/admin', function () {
-    return view( 'admin.home' );
-} )->middleware( 'admin' );
+// Admins Routes
+Route::group(['prefix' => 'admin','middleware'=>'admin'], function () {
+    Route::get( '/', 'AdminController@index' )->name( 'admin.homepage' );
+    Route::get( '/all-users', 'AdminController@users' )->name( 'admin.all-users' );
+    Route::get('/search-user', 'ProfileController@search')->name('search.users');
+    Route::get( '/all-admins', 'AdminController@admins' )->name( 'admin.all-admins' );
+    // Route::get('/search-user', 'ProfileController@search')->name('search.users');
+    Route::get('/search-stories', 'AdminController@search')->name('search.stories');
+    Route::get('/comments', 'CommentController@index')->name('all.comments');
+    Route::get('/add-admin', 'ProfileController@create')->name('create.admin');
+    Route::post('/add-admin', 'ProfileController@store')->name('store.admin');
+});
 
 Auth::routes();
 
@@ -30,6 +39,9 @@ Route::group(['prefix' => 'profile'], function () {
     Route::post( '/update/picture', 'ProfileController@update_pro_pic' )->name( 'update.profile.picture' )->middleware('auth');
     Route::get( '/update/{slug}/password', 'ProfileController@updatepassword' )->name( 'edit.profile.password' )->middleware('auth');
     Route::post( '/update/password', 'ProfileController@updatepasswordstore' )->name( 'update.profile.password' )->middleware('auth');
+    Route::get('/{slug}/make-admin', 'ProfileController@admin')->name('make.admin')->middleware('admin');
+    Route::get('/{slug}/remove-admin', 'ProfileController@remove_admin')->name('remove.admin')->middleware('admin');
+    Route::get('/{slug}/delete', 'ProfileController@destroy')->name('delete.user')->middleware('admin');
 });
 
 // Tag Routes
@@ -51,4 +63,6 @@ Route::group(['prefix' => 'story', 'middleware'=>'auth'], function () {
     Route::get('/{slug}/delete', 'StoryController@destroy')->name('delete.story');
     Route::get('/{slug}/edit', 'StoryController@edit')->name('edit.story');
     Route::post('/{slug}/update', 'StoryController@update')->name('update.story');
+    Route::get('/{slug}/block', 'StoryController@block')->name('block.story')->middleware('admin');
+    Route::get('/{slug}/unblock', 'StoryController@unblock')->name('unblock.story')->middleware('admin');
 });

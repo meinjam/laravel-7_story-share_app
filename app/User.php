@@ -38,4 +38,8 @@ class User extends Authenticatable {
     public function stories() {
         return $this->hasMany( 'App\Story' )->latest();
     }
+
+    public function comments() {
+        return $this->hasMany( 'App\Comment' );
+    }
 }

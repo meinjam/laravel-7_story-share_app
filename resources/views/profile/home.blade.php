@@ -21,7 +21,11 @@
             <div class="card shadow">
                 <div class="p-3">
                     <p class="text-center">
-                        <img src="{{ asset($user->avatar) }}" height="280" class="rounded-circle" alt="profile picture">
+                        @if (strlen($user->avatar))
+                            <img src="{{ asset($user->avatar) }}" height="280" class="rounded-circle" alt="profile picture">
+                        @else
+                            <img src="{{ asset('img/profile-pic/picture-1593092615Bfm5KHc3PQ.jpg') }}" height="280" class="rounded-circle" alt="profile picture">
+                        @endif
                     </p>
                     <p class="text-center">
                         @if ($user->is_admin === 1)

@@ -5,10 +5,24 @@ namespace App\Http\Controllers;
 use App\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Category;
+use App\Story;
+use App\Tag;
+use App\User;
 
 class CommentController extends Controller {
+
     public function index() {
-        //
+        
+        $user = User::where( 'is_admin', '0' )->get();
+        $admin = User::where( 'is_admin', '1' )->get();
+        $story = Story::all();
+        $category = Category::all();
+        $tag = Tag::all();
+        $comment = Comment::all();
+        $comments = Comment::orderBy( 'id', 'desc' )->paginate( 20 );
+        return view( 'admin.comments', compact( 'user', 'admin', 'comments', 'category', 'tag', 'comment', 'story' ) );
+        // return response()->json($users);
     }
 
     public function create() {
@@ -50,11 +64,11 @@ class CommentController extends Controller {
 
         $comment = Comment::findOrFail( $id );
 
-        if ( Auth::id() !== $comment->user_id ) {
-            return redirect()->back()->with( 'error', 'You don\'t have permission to delete this Comment.' );
-        } else {
+        if ( Auth::user()->is_admin == 1 OR Auth::id() === $comment->user_id ) {
             $comment->delete();
             return redirect()->back()->with( 'success', 'Comment deleted Successfully.' );
+        } else {
+            return redirect()->back()->with( 'error', 'You don\'t have permission to delete this Comment.' );
         }
     }
 }
