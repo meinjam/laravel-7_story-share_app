@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title') Add New Tag @endsection
 @section('content')
 <div class="container">
     <div class="row">

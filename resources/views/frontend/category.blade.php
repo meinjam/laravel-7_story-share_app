@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title') {{ ucwords($category->name) }} category stories @endsection
 @section('content')
 <div class="container">
     <div class="row">

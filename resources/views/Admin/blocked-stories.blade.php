@@ -1,5 +1,5 @@
 @extends('layouts.admin-app')
-@section('title') Admin Homepage @endsection
+@section('title') Blocked Stories @endsection
 @section('content')
 <div class="container">
     <div class="row">
@@ -70,17 +70,9 @@
         <div class="col-md-10">
             @include('layouts.message')
 
-            <h2 class=" d-inline">Latest Stories</h2>
-            <a href="{{ route('blocked.stories') }}" class="btn btn-danger d-inline ml-3">Blocked Stories</a>
+            <h2 class="d-inline">Blocked Stories</h2>
+            <a href="{{ route('admin.homepage') }}" class="btn btn-success d-inline ml-3">Back to Stories</a>
             <hr>
-            <form action="{{ route('search.stories') }}" method="get">
-                <div class="input-group mb-3 input-group-lg">
-                    <input type="text" class="form-control" name="search" placeholder="Search stories by title & body text">
-                    <div class="input-group-append">
-                      <button class="btn btn-success btn-lg" type="submit">Search</button>
-                    </div>
-                </div>
-            </form>
 
             <table class="table table-bordered table-hover">
                 <thead class="thead-dark">

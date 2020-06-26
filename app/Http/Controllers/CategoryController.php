@@ -6,6 +6,10 @@ use App\Category;
 use App\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use App\Comment;
+use App\Story;
+use App\User;
 
 class CategoryController extends Controller {
     public function index() {
@@ -29,7 +33,13 @@ class CategoryController extends Controller {
         $category->name = $request->category;
         $category->slug = Str::slug( $request->category );
         $category->save();
-        return redirect()->route( 'create.story' )->with( 'success', 'Category created successfully.' );
+
+        if(Auth::user()->is_admin) {
+            return redirect()->route( 'admin.category' )->with( 'success', 'Category created successfully.' );
+        } else {
+            return redirect()->route( 'create.story' )->with( 'success', 'Category created successfully.' );
+        }
+
     }
 
     public function show( $name ) {
@@ -44,15 +54,35 @@ class CategoryController extends Controller {
         return view( 'frontend.category', compact( 'category', 'categories', 'tagssss', 'stories' ) );
     }
 
-    public function edit( $id ) {
-        //
+    public function edit( $slug ) {
+        
+        $user = User::where( 'is_admin', '0' )->get();
+        $admin = User::where( 'is_admin', '1' )->get();
+        $story = Story::all();
+        $category = Category::all();
+        $tag = Tag::all();
+        $comment = Comment::all();
+        $categories = Category::where('slug', $slug)->firstOrFail();
+        return view( 'category.edit', compact( 'user', 'admin', 'categories', 'category', 'tag', 'comment', 'story' ) );
+        // return response()->json($users);
     }
 
-    public function update( Request $request, $id ) {
-        //
+    public function update( Request $request, $slug ) {
+        
+        $rules = [
+            'category' => ['required', 'min:3', 'max:20'],
+        ];
+        $this->validate( $request, $rules );
+
+        $category = Category::where('slug', $slug)->firstOrFail();
+        $category->name = $request->category;
+        $category->save();
+        return redirect()->route('admin.category')->with( 'success', 'Category Updated Successfully.' );
     }
 
-    public function destroy( $id ) {
-        //
+    public function destroy( $slug ) {
+        
+        $category = Category::where( 'slug', $slug )->firstOrFail()->delete();
+        return redirect()->back()->with( 'success', 'Category Deleted Successfully.' );
     }
 }

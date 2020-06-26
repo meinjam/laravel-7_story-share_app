@@ -19,8 +19,20 @@ class AdminController extends Controller {
         $category = Category::all();
         $tag = Tag::all();
         $comment = Comment::all();
-        $stories = Story::orderBy( 'id', 'desc' )->paginate( 10 );
+        $stories = Story::orderBy( 'id', 'desc' )->where('is_published', '1')->paginate( 10 );
         return view( 'admin.home', compact( 'user', 'admin', 'stories', 'category', 'tag', 'comment', 'story' ) );
+    }
+
+    public function blocked_stories() {
+
+        $user = User::where( 'is_admin', '0' )->get();
+        $admin = User::where( 'is_admin', '1' )->get();
+        $story = Story::all();
+        $category = Category::all();
+        $tag = Tag::all();
+        $comment = Comment::all();
+        $stories = Story::latest()->where('is_published', '0')->paginate( 10 );
+        return view( 'admin.blocked-stories', compact( 'user', 'admin', 'stories', 'category', 'tag', 'comment', 'story' ) );
     }
 
     public function users() {
@@ -63,12 +75,66 @@ class AdminController extends Controller {
             ->orWhere( 'story', 'like', '%' . $search . '%' )
             ->orderBy( 'id', 'desc' )
             ->paginate( 10 );
-        return view( 'admin.search-story', compact( 'user', 'admin', 'result', 'category', 'tag', 'comment', 'story' ) );
+        return view( 'admin.search-story', compact( 'search', 'user', 'admin', 'result', 'category', 'tag', 'comment', 'story' ) );
         // return response()->json($users);
     }
 
-    public function create() {
-        //
+    public function search_category( Request $request ) {
+
+        $search = $request->get( 'search' );
+        
+        $user = User::where( 'is_admin', '0' )->get();
+        $admin = User::where( 'is_admin', '1' )->get();
+        $story = Story::all();
+        $category = Category::all();
+        $tag = Tag::all();
+        $comment = Comment::all();
+        $categories = Category::where( 'name', 'like', '%' . $search . '%' )->firstOrFail();
+        $result = $categories->stories()->paginate(20);
+        return view( 'admin.search-category', compact( 'search', 'user', 'admin', 'result', 'category', 'tag', 'comment', 'story' ) );
+        // return response()->json($result);
+    }
+
+    public function search_tag( Request $request ) {
+
+        $search = $request->get( 'search' );
+        
+        $user = User::where( 'is_admin', '0' )->get();
+        $admin = User::where( 'is_admin', '1' )->get();
+        $story = Story::all();
+        $category = Category::all();
+        $tag = Tag::all();
+        $comment = Comment::all();
+        $tags = Tag::where( 'tag', 'like', '%' . $search . '%' )->firstOrFail();
+        $result = $tags->stories()->paginate(20);
+        return view( 'admin.search-tag', compact( 'search', 'user', 'admin', 'result', 'category', 'tag', 'comment', 'story' ) );
+        // return response()->json($result);
+    }
+
+    public function category() {
+        
+        $user = User::where( 'is_admin', '0' )->get();
+        $admin = User::where( 'is_admin', '1' )->get();
+        $story = Story::all();
+        $category = Category::all();
+        $tag = Tag::all();
+        $comment = Comment::all();
+        $categories = Category::latest()->paginate(10);
+        return view( 'admin.category', compact( 'user', 'admin', 'categories', 'category', 'tag', 'comment', 'story' ) );
+        // return response()->json($users);
+    }
+
+    public function tag() {
+        
+        $user = User::where( 'is_admin', '0' )->get();
+        $admin = User::where( 'is_admin', '1' )->get();
+        $story = Story::all();
+        $category = Category::all();
+        $tag = Tag::all();
+        $comment = Comment::all();
+        $tags = Tag::latest()->paginate(10);
+        return view( 'admin.tag', compact( 'user', 'admin', 'tags', 'category', 'tag', 'comment', 'story' ) );
+        // return response()->json($users);
     }
 
     public function store( Request $request ) {

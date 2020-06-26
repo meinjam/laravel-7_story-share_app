@@ -39,13 +39,13 @@ class FrontendController extends Controller {
             $result = Story::where( 'title', 'like', '%' . $search . '%' )
             ->orWhere( 'story', 'like', '%' . $search . '%' )
             ->orderBy( 'id', 'desc' )
-            ->paginate( 5 );
+            ->paginate( 10 );
             // $categories = Category::orderBy( 'id', 'desc' )->get();
             // $tagssss = Tag::orderBy( 'id', 'desc' )->get();
             $categories = Category::withCount( 'stories' )->orderBy('stories_count', 'desc')->take(5)->get();
             $tagssss = Tag::withCount( 'stories' )->orderBy('stories_count', 'desc')->take(5)->get();
 
-            return view( 'frontend.search', compact( 'result', 'categories', 'tagssss' ) );
+            return view( 'frontend.search', compact( 'search', 'result', 'categories', 'tagssss' ) );
         }
         // $result = DB::table( 'stories' )
         //     ->join( 'categories', 'categories.id', '=', 'stories.category_id' )
@@ -71,6 +71,11 @@ class FrontendController extends Controller {
     public function contact() {
 
         return view( 'frontend.contact' );
+    }
+
+    public function about() {
+
+        return view( 'frontend.about' );
     }
 
     public function store( Request $request ) {

@@ -5,7 +5,7 @@
 <div class="card mb-3 shadow">
     <img class="card-img-top" src="{{ asset($story->image) }}" alt="{{ $story->title }}">
     <div class="card-body">
-        <h2 class="card-title text-justify">{{ $story->title }}</h2>
+        <h2 class="card-title">{{ $story->title }}</h2>
         <div class="d-flex justify-content-between">
             <p><i class="far fa-user"></i> <a
                     href="{{ route('profile', $story->user->slug) }}">{{ ucwords($story->user->name) }}</a></p>

@@ -157,7 +157,7 @@ class ProfileController extends Controller {
         $category = Category::all();
         $tag = Tag::all();
         $comment = Comment::all();
-        return view( 'admin.search-user', compact( 'user', 'admin', 'result', 'category', 'tag', 'comment', 'story' ) );
+        return view( 'admin.search-user', compact( 'search', 'user', 'admin', 'result', 'category', 'tag', 'comment', 'story' ) );
     }
 
     public function create() {

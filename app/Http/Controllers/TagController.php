@@ -6,6 +6,10 @@ use App\Category;
 use App\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use App\Comment;
+use App\Story;
+use App\User;
 
 class TagController extends Controller {
     public function index() {
@@ -29,7 +33,12 @@ class TagController extends Controller {
         $tags->tag = $request->tag;
         $tags->slug = Str::slug( $request->tag );
         $tags->save();
-        return redirect()->route( 'create.story' )->with( 'success', 'Tag created successfully.' );
+
+        if(Auth::user()->is_admin) {
+            return redirect()->route( 'admin.tag' )->with( 'success', 'Tag created successfully.' );
+        } else {
+            return redirect()->route( 'create.story' )->with( 'success', 'Tag created successfully.' );
+        }
     }
 
     public function show( $name ) {
@@ -44,15 +53,35 @@ class TagController extends Controller {
         return view( 'frontend.tag', compact( 'tag', 'categories', 'tagssss', 'stories' ) );
     }
 
-    public function edit( $id ) {
-        //
+    public function edit( $slug ) {
+        
+        $user = User::where( 'is_admin', '0' )->get();
+        $admin = User::where( 'is_admin', '1' )->get();
+        $story = Story::all();
+        $category = Category::all();
+        $tag = Tag::all();
+        $comment = Comment::all();
+        $tags = Tag::where('slug', $slug)->firstOrFail();
+        return view( 'tags.edit', compact( 'user', 'admin', 'tags', 'category', 'tag', 'comment', 'story' ) );
+        // return response()->json($users);
     }
 
     public function update( Request $request, $id ) {
-        //
+        
+        $rules = [
+            'tag' => ['required', 'min:3', 'max:20'],
+        ];
+        $this->validate( $request, $rules );
+
+        $tag = Tag::where('slug', $id)->first();
+        $tag->tag = $request->tag;
+        $tag->save();
+        return redirect()->route('admin.tag')->with( 'success', 'Tag Updated Successfully.' );
     }
 
-    public function destroy( $id ) {
-        //
+    public function destroy( $slug ) {
+        
+        $tag = Tag::where( 'slug', $slug )->firstOrFail()->delete();
+        return redirect()->back()->with( 'success', 'Tag Deleted Successfully.' );
     }
 }

@@ -1,5 +1,5 @@
 @extends('layouts.admin-app')
-
+@section('title') All Comments @endsection
 @section('content')
 <div class="container">
     <div class="row">

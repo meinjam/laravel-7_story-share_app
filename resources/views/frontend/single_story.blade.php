@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title') Story Details - {{ $story->title }} @endsection
 @section('content')
 <div class="container">
     @include('layouts.message')

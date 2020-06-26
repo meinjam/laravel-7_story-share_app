@@ -1,8 +1,8 @@
 @extends('layouts.app')
-
+@section('title') Search result of {{ $search }} @endsection
 @section('content')
 <div class="container">
-    <h1>Search Results</h1>
+    <h1>Search Results of "{{ strtoupper($search) }}" keyword</h1>
     <hr>
     <div class="row">
         <div class="col-md-8">

@@ -1,5 +1,5 @@
 @extends('layouts.admin-app')
-@section('title') Admin Homepage @endsection
+@section('title') Search Category @endsection
 @section('content')
 <div class="container">
     <div class="row">
@@ -70,18 +70,20 @@
         <div class="col-md-10">
             @include('layouts.message')
 
-            <h2 class=" d-inline">Latest Stories</h2>
-            <a href="{{ route('blocked.stories') }}" class="btn btn-danger d-inline ml-3">Blocked Stories</a>
+            <h2>{{ ucwords($search) }} Category all Stories</h2>
             <hr>
-            <form action="{{ route('search.stories') }}" method="get">
+            <form action="{{ route('search.category') }}" method="get">
                 <div class="input-group mb-3 input-group-lg">
-                    <input type="text" class="form-control" name="search" placeholder="Search stories by title & body text">
+                    <input type="text" class="form-control" name="search" placeholder="Type category name to search category related stories">
                     <div class="input-group-append">
                       <button class="btn btn-success btn-lg" type="submit">Search</button>
                     </div>
                 </div>
             </form>
 
+            @if (!$result->count())
+                <h2>Sorry, No story found with this category name.</h2>
+            @else
             <table class="table table-bordered table-hover">
                 <thead class="thead-dark">
                     <tr>
@@ -96,7 +98,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($stories as $story)
+                    @foreach ($result as $story)
                     <tr>
                         <td>{{ $story->id }}</td>
                         <td><img src="{{ asset($story->image) }}" height="70" alt="{{ $story->title }}"></td>
@@ -116,7 +118,9 @@
                     @endforeach
                 </tbody>
             </table>
-            {{ $stories->links() }}
+            {{ $result->links() }}
+            @endif
+
         </div>
     </div>
 </div>

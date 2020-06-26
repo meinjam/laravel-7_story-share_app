@@ -1,12 +1,12 @@
 @extends('layouts.app')
-
+@section('title') {{ $user->name }} Profile @endsection
 @section('content')
 <div class="container">
     @include('layouts.message')
     <div class="d-flex justify-content-between">
         <h1>
             @if (Auth::id() == $user->id)
-            Your Profile Information {{ strtoupper($user->name) }}
+            Your Profile {{ strtoupper($user->name) }}
             @else
             Welcome to {{ $user->name }}'s Profile
             @endif
@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="col-md-8">
-            <h3 class="text-center">
+            <h3 class="text-center mt-3">
                 @if (Auth::id() == $user->id)
                 Your Latest Stories
                 @else

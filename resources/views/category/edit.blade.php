@@ -1,5 +1,5 @@
 @extends('layouts.admin-app')
-@section('title') Admin Homepage @endsection
+@section('title') Edit Category @endsection
 @section('content')
 <div class="container">
     <div class="row">
@@ -70,53 +70,30 @@
         <div class="col-md-10">
             @include('layouts.message')
 
-            <h2 class=" d-inline">Latest Stories</h2>
-            <a href="{{ route('blocked.stories') }}" class="btn btn-danger d-inline ml-3">Blocked Stories</a>
+            <h2>Edit Category</h2>
             <hr>
-            <form action="{{ route('search.stories') }}" method="get">
-                <div class="input-group mb-3 input-group-lg">
-                    <input type="text" class="form-control" name="search" placeholder="Search stories by title & body text">
-                    <div class="input-group-append">
-                      <button class="btn btn-success btn-lg" type="submit">Search</button>
+            
+            <div class="card shadow">
+                <form action="{{ route('update.category', $categories->slug) }}" method="post" class="p-5">
+                    @csrf
+                    <div class="form-group">
+                        <label for="category">Enter Category Name</label>
+                        <div>
+                            <input id="category" type="text" class="form-control @error('category') is-invalid @enderror"
+                                name="category" value="{{ $categories->name }}" autocomplete="category" autofocus>
+                            @error('category')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
                     </div>
-                </div>
-            </form>
-
-            <table class="table table-bordered table-hover">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Image</th>
-                        <th>Title</th>
-                        <th>Date & Time</th>
-                        <th>Author</th>
-                        <th>Comments</th>
-                        <th>Details</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($stories as $story)
-                    <tr>
-                        <td>{{ $story->id }}</td>
-                        <td><img src="{{ asset($story->image) }}" height="70" alt="{{ $story->title }}"></td>
-                        <td>{{ $story->title }}</td>
-                        <td>{{ $story->created_at->format('h:i a, d M Y') }}</td>
-                        <td><a href="{{ route('profile', $story->user->slug) }}" target="_blank">{{ $story->user->name }}</a></td>
-                        <td>{{ $story->comments->count() }}</td>
-                        <td><a href="{{ route('single.story', $story->slug) }}" class="btn btn-info btn-sm" target="_blank">Preview</a></td>
-                        <td>
-                            @if (!$story->is_published)
-                            <a href="{{ route('unblock.story', $story->slug) }}" class="btn btn-success btn-sm">Unblock</a>
-                            @else
-                            <a href="{{ route('block.story', $story->slug) }}" class="btn btn-danger btn-sm">Block</a>
-                            @endif
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            {{ $stories->links() }}
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">Update</button>
+                        <a href="{{ route('admin.category') }}" class="btn btn-primary">Back To Categories</a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

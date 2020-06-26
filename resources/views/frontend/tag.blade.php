@@ -1,8 +1,8 @@
 @extends('layouts.app')
-
+@section('title') {{ ucwords($tag->tag) }} tag stories @endsection
 @section('content')
 <div class="container">
-    <h1>Recent Stories That Contains {{ ucfirst($tag->tag) }} Tag</h1>
+    <h1>Recent Stories of {{ ucfirst($tag->tag) }} Tag</h1>
     <hr>
     <div class="row">
         <div class="col-md-8">

@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Story Share App</title>
+    <title>@yield('title') | A Simple Story Sharing App (by inzam)</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -59,7 +59,7 @@
                         @endif
                         @endauth
                         <li class="nav-item active">
-                            <a class="nav-link" href="{{ url('/') }}">About</a>
+                            <a class="nav-link" href="{{ route('about') }}">About</a>
                         </li>
                         <li class="nav-item active">
                             <a class="nav-link" href="{{ route('contact') }}">Contact</a>
@@ -68,11 +68,15 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <form action="{{ route('search.all') }}" method="get" class="form-inline my-2 my-lg-0">
-                            <input class="form-control" type="search" name="search" placeholder="Search Content"
-                                aria-label="Search">
-                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        <form action="{{ route('search.all') }}" method="get">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="search" placeholder="Search Story?">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-success" type="submit">Search</button>
+                                </div>
+                            </div>
                         </form>
+
                         <!-- Authentication Links -->
                         @guest
                         <li class="nav-item active">
@@ -119,7 +123,7 @@
             <div class="container">
                 <h5 class="text-center">Copyright &copy; 2020. Story Share App. All rights reserved</h5>
                 <p class="lead text-center">made with ❤️️ by <a href="https://github.com/meinjam"
-                        target="_blank">injam</a></p>
+                        target="_blank">ইনজামামুল হক</a></p>
             </div>
         </footer>
     </div>

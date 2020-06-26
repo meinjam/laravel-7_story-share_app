@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Story Share App</title>
+    <title>@yield('title') | A Simple Story Sharing App (by inzam)</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -55,7 +55,7 @@
                             <a class="nav-link" href="{{ route('admin.homepage') }}">Home</a>
                         </li>
                         <li class="nav-item active">
-                            <a class="nav-link" href="{{ route('profile', Auth::user()->slug) }}">Profile</a>
+                            <a class="nav-link" href="{{ route('profile', Auth::user()->slug) }}" target="_blank">Profile</a>
                         </li>
                         {{-- @auth
                         
@@ -115,10 +115,10 @@
                         <a href="{{ route('admin.all-admins') }}" class="btn btn-danger btn-block">All Admins</a>
                     </div>
                     <div class="col-md-2">
-                        <a href="" class="btn btn-warning btn-block">All Categories</a>
+                        <a href="{{ route('admin.category') }}" class="btn btn-warning btn-block">All Categories</a>
                     </div>
                     <div class="col-md-2">
-                        <a href="" class="btn btn-light btn-block">All Tags</a>
+                        <a href="{{ route('admin.tag') }}" class="btn btn-light btn-block">All Tags</a>
                     </div>
                     <div class="col-md-2">
                         <a href="{{ route('all.comments') }}" class="btn btn-primary btn-block">All Comments</a>
@@ -135,7 +135,7 @@
             <div class="container">
                 <h5 class="text-center">Copyright &copy; 2020. Story Share App. All rights reserved</h5>
                 <p class="lead text-center">made with ❤️️ by <a href="https://github.com/meinjam"
-                        target="_blank">injam</a></p>
+                        target="_blank">ইনজামামুল হক</a></p>
             </div>
         </footer>
     </div>

@@ -1,5 +1,5 @@
 @extends('layouts.admin-app')
-@section('title') Admin Homepage @endsection
+@section('title') All Tags @endsection
 @section('content')
 <div class="container">
     <div class="row">
@@ -70,12 +70,12 @@
         <div class="col-md-10">
             @include('layouts.message')
 
-            <h2 class=" d-inline">Latest Stories</h2>
-            <a href="{{ route('blocked.stories') }}" class="btn btn-danger d-inline ml-3">Blocked Stories</a>
+            <h2 class="d-inline">Latest Tags</h2>
+            <a href="{{ route('create.tag') }}" class="btn btn-success d-inline ml-3">Add New Tag</a>
             <hr>
-            <form action="{{ route('search.stories') }}" method="get">
+            <form action="{{ route('search.tag') }}" method="get">
                 <div class="input-group mb-3 input-group-lg">
-                    <input type="text" class="form-control" name="search" placeholder="Search stories by title & body text">
+                    <input type="text" class="form-control" name="search" placeholder="Type tag name to search tag related stories">
                     <div class="input-group-append">
                       <button class="btn btn-success btn-lg" type="submit">Search</button>
                     </div>
@@ -86,37 +86,27 @@
                 <thead class="thead-dark">
                     <tr>
                         <th>ID</th>
-                        <th>Image</th>
-                        <th>Title</th>
-                        <th>Date & Time</th>
-                        <th>Author</th>
-                        <th>Comments</th>
-                        <th>Details</th>
-                        <th>Actions</th>
+                        <th>Name</th>
+                        <th>Created At</th>
+                        <th>Stories</th>
+                        <th>Editing</th>
+                        <th>Deleting</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($stories as $story)
+                    @foreach ($tags as $tag)
                     <tr>
-                        <td>{{ $story->id }}</td>
-                        <td><img src="{{ asset($story->image) }}" height="70" alt="{{ $story->title }}"></td>
-                        <td>{{ $story->title }}</td>
-                        <td>{{ $story->created_at->format('h:i a, d M Y') }}</td>
-                        <td><a href="{{ route('profile', $story->user->slug) }}" target="_blank">{{ $story->user->name }}</a></td>
-                        <td>{{ $story->comments->count() }}</td>
-                        <td><a href="{{ route('single.story', $story->slug) }}" class="btn btn-info btn-sm" target="_blank">Preview</a></td>
-                        <td>
-                            @if (!$story->is_published)
-                            <a href="{{ route('unblock.story', $story->slug) }}" class="btn btn-success btn-sm">Unblock</a>
-                            @else
-                            <a href="{{ route('block.story', $story->slug) }}" class="btn btn-danger btn-sm">Block</a>
-                            @endif
-                        </td>
+                        <td>{{ $tag->id }}</td>
+                        <td>{{ $tag->tag }}</td>
+                        <td>{{ $tag->created_at->format('h:i a, d M Y') }}</td>
+                        <td>{{ $tag->stories->count() }}</td>
+                        <td><a href="{{ route('edit.tag', $tag->slug) }}" class="btn btn-success btn-sm">Edit</a></td>
+                        <td><a href="{{ route('delete.tag', $tag->slug) }}" class="btn btn-danger btn-sm">Delete</a></td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
-            {{ $stories->links() }}
+            {{ $tags->links() }}
         </div>
     </div>
 </div>

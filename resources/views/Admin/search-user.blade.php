@@ -1,5 +1,5 @@
 @extends('layouts.admin-app')
-
+@section('title') Search User @endsection
 @section('content')
 <div class="container">
     <div class="row">
@@ -70,7 +70,7 @@
         <div class="col-md-10">
             @include('layouts.message')
 
-            <h2>All Search Results</h2>
+            <h2>All results with "{{ strtoupper($search) }}" name</h2>
             <hr>
             <form action="{{ route('search.users') }}" method="get">
                 <div class="input-group mb-3 input-group-lg">

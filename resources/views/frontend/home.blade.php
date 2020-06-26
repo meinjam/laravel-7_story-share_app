@@ -1,9 +1,9 @@
 @extends('layouts.app')
-
+@section('title') Homepage @endsection
 @section('content')
 <div class="container">
     @include('layouts.message')
-    <h1>Recent Stories Shared by Users</h1>
+    <h1>Recent Stories</h1>
     <hr>
     <div class="row">
         <div class="col-md-8">

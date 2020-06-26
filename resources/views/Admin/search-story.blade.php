@@ -1,5 +1,5 @@
 @extends('layouts.admin-app')
-
+@section('title') Search Story by keyword @endsection
 @section('content')
 <div class="container">
     <div class="row">
@@ -70,7 +70,11 @@
         <div class="col-md-10">
             @include('layouts.message')
 
-            <h2>Search Result</h2>
+            @if ($search)
+            <h2>All stories with "{{ strtoupper($search) }}" keyword</h2>
+            @else
+            <h2>Search Results</h2>
+            @endif
             <hr>
             <form action="{{ route('search.stories') }}" method="get">
                 <div class="input-group mb-3 input-group-lg">
@@ -82,7 +86,7 @@
             </form>
 
             @if (!$result->count())
-                <h2>Sorry, No story found.</h2>
+                <h2>Sorry, No story found with this keyword.</h2>
             @else
             <table class="table table-bordered table-hover">
                 <thead class="thead-dark">
@@ -106,12 +110,12 @@
                         <td>{{ $story->created_at->format('h:i a, d M Y') }}</td>
                         <td><a href="{{ route('profile', $story->user->slug) }}" target="_blank">{{ $story->user->name }}</a></td>
                         <td>{{ $story->comments->count() }}</td>
-                        <td><a href="{{ route('single.story', $story->slug) }}" class="btn btn-info" target="_blank">Preview</a></td>
+                        <td><a href="{{ route('single.story', $story->slug) }}" class="btn btn-info btn-sm" target="_blank">Preview</a></td>
                         <td>
                             @if (!$story->is_published)
-                            <a href="{{ route('unblock.story', $story->slug) }}" class="btn btn-success">Unblock</a>
+                            <a href="{{ route('unblock.story', $story->slug) }}" class="btn btn-success btn-sm">Unblock</a>
                             @else
-                            <a href="{{ route('block.story', $story->slug) }}" class="btn btn-danger">Block</a>
+                            <a href="{{ route('block.story', $story->slug) }}" class="btn btn-danger btn-sm">Block</a>
                             @endif
                         </td>
                     </tr>

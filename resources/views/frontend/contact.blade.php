@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title') Contact Us @endsection
 @section('content')
 <div class="container">
     <section id="contact" class="py-5">
