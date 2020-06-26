@@ -22,6 +22,11 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+        body{
+            font-family: 'Nunito', sans-serif, "SolaimanLipiNormal";
+        }
+    </style>
 </head>
 
 <body>

@@ -75,7 +75,9 @@ class ProfileController extends Controller {
         $user = Auth::user();
         $user->avatar = $imageURL;
         $user->save();
-        unlink( $oldpicture );
+        if($oldpicture){
+            unlink( $oldpicture );
+        }
         return redirect( '/profile' . '/' . Auth::user()->slug )->with( 'success', 'Profile Picture Updated Successfully.' );
     }
 
@@ -130,7 +132,9 @@ class ProfileController extends Controller {
         $image = $profile->avatar;
         $delete = $profile->delete();
         if ($delete) {
-            unlink( $image );
+            if($image) {
+                unlink( $image );
+            }
             return redirect()->back()->with( 'success', 'User blocked Successfully.' );
         }
     }
@@ -180,10 +184,6 @@ class ProfileController extends Controller {
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-        $user->dob = 'null';
-        $user->phone = 'null';
-        $user->gender = 'null';
-        $user->avatar = 'img/profile-pic/p_picture-1592997626MnMcE0jiqT.jpg';
         $user->is_admin = true;
         $user->slug = Str::slug( $request->name . '-' . time() );
         $user->save();

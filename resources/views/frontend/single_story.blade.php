@@ -42,32 +42,34 @@
                 <h2 class="text-danger">Please <a href="{{ URL('/login') }}">Sign in</a> for seeing and posting comments.</h2>
             @else
             <h2>Leave a Reply?</h2>
-            <form action="{{ route('store.comment', $story->id) }}" method="post">
-                @csrf
-                <div class="form-group">
-                    <label for="comment">Enter Comment:</label>
-                    <div>
-                        <textarea name="comment" class="form-control @error('comment') is-invalid @enderror" id="comment"
-                            rows="5" value="{{ old('comment') }}" autocomplete="comment" autofocus></textarea>
-                        @error('comment')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-                </div>
+                @if ($story->is_published)
+                    <form action="{{ route('store.comment', $story->id) }}" method="post">
+                        @csrf
+                        <div class="form-group">
+                            <label for="comment">Enter Comment:</label>
+                            <div>
+                                <textarea name="comment" class="form-control" id="comment" rows="5" value="{{ old('comment') }}"></textarea>
+                            </div>
+                        </div>
 
-                <div class="form-group">
-                    <button type="submit" class="btn btn-success">Post Comment</button>
-                </div>
-            </form>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success">Post Comment</button>
+                        </div>
+                    </form>
+                @else
+                    <h3 class="text-danger">Sorry, The Story is blocked by the admin. You can not reply.</h3>
+                @endif
 
             <h2 class="mt-4">All Comments ({{ $story->comments->count() }})</h2>
             @foreach ($story->comments as $comment)
             <div class="card p-3 shadow mb-2">
                 <div class="row">
                     <div class="col-2">
+                        @if ($comment->user->avatar)
                         <img src="{{ asset($comment->user->avatar) }}" class="img-fluid rounded-circle" alt="">
+                        @else
+                        <img src="{{ asset('img/images/user.jpg') }}" class="img-fluid rounded-circle" alt="profile picture">
+                        @endif
                     </div>
                     <div class="col-10">
                         <div class="d-flex justify-content-between">

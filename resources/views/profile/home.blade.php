@@ -21,10 +21,10 @@
             <div class="card shadow">
                 <div class="p-3">
                     <p class="text-center">
-                        @if (strlen($user->avatar))
+                        @if ($user->avatar)
                             <img src="{{ asset($user->avatar) }}" height="280" class="rounded-circle" alt="profile picture">
                         @else
-                            <img src="{{ asset('img/profile-pic/picture-1593092615Bfm5KHc3PQ.jpg') }}" height="280" class="rounded-circle" alt="profile picture">
+                            <img src="{{ asset('img/images/user.jpg') }}" height="280" class="rounded-circle" alt="profile picture">
                         @endif
                     </p>
                     <p class="text-center">
@@ -34,11 +34,11 @@
                         <i class="fas fa-circle text-warning"></i> <strong>User</strong>
                         @endif
                     </p>
-                    <h2>Name: {{ $user->name }}</h2>
+                    <h2>Name: {{ ucwords($user->name) }}</h2>
                     <div>
                         <p>Email: {{ $user->email }}</p>
                         <p>Phone: {{ $user->phone }}</p>
-                        <p>Gender: {{ $user->gender }}</p>
+                        <p>Gender: {{ ucfirst($user->gender) }}</p>
                         <p>Birthday: {{ $user->dob }}</p>
                     </div>
                     @if (Auth::id()== $user->id)
@@ -69,7 +69,7 @@
                 <img class="card-img-top img-fluid" src="{{ asset($story->image) }}" alt="{{ $story->title }}">
                 <div class="card-body">
                     <h2 class="card-title">{{ $story->title }}</h2>
-                    <p class="card-text text-justify">{{ substr($story->story, 0, 150) . '.........' }}</p>
+                    {{-- <p class="card-text text-justify">{{ substr($story->story, 0, 150) . '.........' }}</p> --}}
                     <div class="d-flex justify-content-between">
                         <p><i class="far fa-bookmark"></i> <a
                                 href="{{ route('show.category', strtolower($story->category->name)) }}">{{ ucfirst($story->category->name) }}</a>

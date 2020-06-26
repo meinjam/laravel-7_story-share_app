@@ -103,7 +103,13 @@
                     @foreach ($result as $user)
                     <tr>
                         <td>{{ $user->id }}</td>
-                        <td><img src="{{ asset($user->avatar) }}" height="70" alt="{{ $user->name }}"></td>
+                        <td>
+                            @if ($user->avatar)
+                                <img src="{{ asset($user->avatar) }}" height="70" class="rounded-circle" alt="{{ $user->name }}">
+                            @else
+                                <img src="{{ asset('img/images/user.jpg') }}" height="70" class="rounded-circle" alt="{{ $user->name }}">
+                            @endif
+                        </td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->created_at->format('h:i a, d M Y') }}</td>
                         <td>{{ $user->stories->count() }}</td>
