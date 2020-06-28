@@ -18,6 +18,7 @@ class AdminSeeder extends Seeder {
             'password' => Hash::make( 'injam2015jsr' ),
             'is_admin' => true,
             'slug'     => 'injamamul-haque',
+            'created_at'     => '2020-06-28 18:46:13',
         ] );
     }
 }
