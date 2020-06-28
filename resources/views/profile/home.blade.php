@@ -6,14 +6,11 @@
     <div class="d-flex justify-content-between">
         <h1>
             @if (Auth::id() == $user->id)
-            Your Profile {{ strtoupper($user->name) }}
+            Your Profile
             @else
             Welcome to {{ $user->name }}'s Profile
             @endif
         </h1>
-        @if (Auth::id() == $user->id)
-        <a href="{{ route('create.story') }}" class="btn btn-primary btn-lg">Add New Story</a>
-        @endif
     </div>
     <hr>
     <div class="row">
@@ -61,6 +58,9 @@
                 {{ $user->name }}'s Latest Stories
                 @endif
             </h3>
+            @if (Auth::id() == $user->id)
+            <a href="{{ route('create.story') }}" class="btn btn-primary btn-lg btn-block mb-3">Add New Story</a>
+            @endif
             @if ($stories->count() == 0)
                 <h1 class="mt-3">Opps, No Story Found!!!</h1>
             @else
@@ -75,7 +75,7 @@
                                 href="{{ route('show.category', strtolower($story->category->name)) }}">{{ ucfirst($story->category->name) }}</a>
                         </p>
 
-                        <p><i class="far fa-clock"></i> {{ $story->created_at->diffForHumans() }}</p>
+                        <p><i class="far fa-clock"></i> {{ $story->created_at->format('h:i a, d M Y') }}</p>
                     </div>
                     <div class="d-flex justify-content-between">
                         <p><i class="fas fa-tags"></i>

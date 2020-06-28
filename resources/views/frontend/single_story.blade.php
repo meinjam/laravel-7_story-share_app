@@ -86,7 +86,7 @@
                             @endif
                         </div>
                         <p class="text-justify">{{ $comment->comment }}</p>
-                        <p class="text-muted">{{ $comment->created_at->format('M d, Y h:i a') }}</p>
+                        <p class="text-muted">{{ $comment->created_at->format('h:i a, d M Y') }}</p>
                     </div>
                 </div>
             </div>

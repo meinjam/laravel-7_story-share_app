@@ -5,13 +5,16 @@
     <div class="row">
         <div class="col-md-8 offset-md-2">
             @include('layouts.message')
-            <div class="d-flex">
-                <h2>Add New Story</h2>
-                <a href="{{ route('create.tag') }}" class="btn btn-primary ml-auto mr-2">Add New Tag</a>
-                <a href="{{ route('create.category') }}" class="btn btn-secondary">Add New Category</a>
-            </div>
-            <hr>
-
+                <h2 class="text-center">Add New Story</h2>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <a href="{{ route('create.tag') }}" class="btn btn-primary btn-block mb-3">Add New Tag</a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{{ route('create.category') }}" class="btn btn-secondary btn-block mb-3">Add New Category</a>
+                    </div>
+                </div>
             <div class="card shadow">
                 <form action="{{ route('store.story') }}" method="post" enctype="multipart/form-data" class="p-5">
                     @csrf

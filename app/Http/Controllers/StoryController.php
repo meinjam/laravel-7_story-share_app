@@ -36,7 +36,7 @@ class StoryController extends Controller {
             'category_id' => 'required',
             // 'tags'        => 'required',
             'image'       => 'required|image|max:5000',
-            'story'       => 'required|min:20|max:5000',
+            'story'       => 'required|min:20',
         ];
 
         $this->validate( $request, $rules );
@@ -86,7 +86,7 @@ class StoryController extends Controller {
             'category_id' => 'required',
             // 'tags'        => 'required',
             'image'       => 'image|max:5000',
-            'story'       => 'required|min:20|max:5000',
+            'story'       => 'required|min:20',
         ];
 
         $this->validate( $request, $rules );

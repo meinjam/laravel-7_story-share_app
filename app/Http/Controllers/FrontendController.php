@@ -13,8 +13,8 @@ class FrontendController extends Controller {
 
         $stories = Story::orderBy( 'id', 'desc' )->where( 'is_published', '1' )->paginate( 5 );
         // $categories = Category::orderBy( 'id', 'desc' )->get();
-        $categories = Category::withCount( 'stories' )->orderBy('stories_count', 'desc')->take(5)->get();
-        $tagssss = Tag::withCount( 'stories' )->orderBy('stories_count', 'desc')->take(5)->get();
+        $categories = Category::withCount( 'stories' )->orderBy( 'stories_count', 'desc' )->take( 5 )->get();
+        $tagssss = Tag::withCount( 'stories' )->orderBy( 'stories_count', 'desc' )->take( 5 )->get();
         // $tagssss = Tag::orderBy( 'id', 'desc' )->get();
         return view( 'frontend.home', compact( 'stories', 'categories', 'tagssss' ) );
     }
@@ -24,8 +24,8 @@ class FrontendController extends Controller {
         $story = Story::where( 'slug', $slug )->firstOrFail();
         // $tags = Tag::orderBy( 'id', 'desc' )->get();
         // $categories = Category::orderBy( 'id', 'desc' )->get();
-        $categories = Category::withCount( 'stories' )->orderBy('stories_count', 'desc')->take(5)->get();
-        $tags = Tag::withCount( 'stories' )->orderBy('stories_count', 'desc')->take(5)->get();
+        $categories = Category::withCount( 'stories' )->orderBy( 'stories_count', 'desc' )->take( 5 )->get();
+        $tags = Tag::withCount( 'stories' )->orderBy( 'stories_count', 'desc' )->take( 5 )->get();
         return view( 'frontend.single_story', compact( 'story', 'tags', 'categories' ) );
     }
 
@@ -36,36 +36,21 @@ class FrontendController extends Controller {
         if ( $search == '' ) {
             return redirect()->route( 'homepage' )->with( 'error', 'Please type something and search.' );
         } else {
-            $result = Story::where( 'title', 'like', '%' . $search . '%' )
-            ->orWhere( 'story', 'like', '%' . $search . '%' )
-            ->orderBy( 'id', 'desc' )
-            ->paginate( 10 );
-            // $categories = Category::orderBy( 'id', 'desc' )->get();
-            // $tagssss = Tag::orderBy( 'id', 'desc' )->get();
-            $categories = Category::withCount( 'stories' )->orderBy('stories_count', 'desc')->take(5)->get();
-            $tagssss = Tag::withCount( 'stories' )->orderBy('stories_count', 'desc')->take(5)->get();
+            $result = Story::whereHas( 'category', function ( $query ) use ( $search ) {
+                $query->where( 'name', 'like', '%' . $search . '%' );
+            } )->orWhereHas( 'tags', function ( $query ) use ( $search ) {
+                $query->where( 'tag', 'like', '%' . $search . '%' );
+            } )
+                ->orWhere( 'title', 'like', '%' . $search . '%' )
+                ->orWhere( 'story', 'like', '%' . $search . '%' )
+                ->latest()
+                ->paginate( 10 );
+
+            $categories = Category::withCount( 'stories' )->orderBy( 'stories_count', 'desc' )->take( 5 )->get();
+            $tagssss = Tag::withCount( 'stories' )->orderBy( 'stories_count', 'desc' )->take( 5 )->get();
 
             return view( 'frontend.search', compact( 'search', 'result', 'categories', 'tagssss' ) );
         }
-        // $result = DB::table( 'stories' )
-        //     ->join( 'categories', 'categories.id', '=', 'stories.category_id' )
-        //     ->join( 'users', 'user.id', '=', 'stories.user_id' )
-        //     ->select( 'stories.*', 'categories.name' )
-        //     ->where( 'stories.title', 'like', '%' . $search . '%' )
-        //     ->orWhere( 'stories.story', 'like', '%' . $search . '%' )
-        //     ->orWhere( 'categories.name', 'like', '%' . $search . '%' )
-        //     ->orderBy( 'id', 'desc' )
-        //     // ->paginate( 10 );
-        //     ->get();
-
-        // $result = Story::with( 'category', 'tags' )
-        //     ->where( 'title', 'like', '%' . $search . '%' )
-        //     ->orWhere( 'story', 'like', '%' . $search . '%' )
-        //     ->whereHas( 'category', function ( $query ) use ( $request ) {
-        //         $query->where( 'name', 'like', '%' . $request . '%' );
-        //     } )->get();
-
-        // return response()->json( $result );
     }
 
     public function contact() {
